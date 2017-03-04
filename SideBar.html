@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <!-- The CSS package above applies Google styling to buttons and other elements. -->
+    <style>
+    .branding-below {
+        bottom: 56px;
+        top: 0;
+    }
+    
+    .branding-text {
+        left: 7px;
+        position: relative;
+        top: 3px;
+    }
+    
+    .col-contain {
+        overflow: hidden;
+    }
+    
+    .col-one {
+        float: left;
+        width: 50%;
+    }
+    
+    .logo {
+        vertical-align: middle;
+    }
+    
+    .radio-spacer {
+        height: 20px;
+    }
+    
+    .width-100 {
+        width: 100%;
+    }
+    </style>
+    <script>
+    // Prevent forms from submitting.
+    function preventFormSubmit() {
+        var forms = document.querySelectorAll('form');
+        for (var i = 0; i < forms.length; i++) {
+            forms[i].addEventListener('submit', function(event) {
+                event.preventDefault();
+            });
+        }
+    }
+    window.addEventListener('load', preventFormSubmit);
+
+    function handleFormSubmit(formObject) {
+        google.script.run.withSuccessHandler(updateDom).processForm(formObject);
+    }
+    
+    function updateDom(text) {
+        var div = document.getElementById('output');
+        div.innerHTML = '<span>' + text + '</span>';
+      }
+      
+     function updateToken(data){
+     var div = document.getElementById('token');
+        div.value = data.api_token;
+        var div2 = document.getElementById('output');
+        div2.innerHTML = '<span> user = ' + data.fullname + '</span>';
+     }
+     function onSuccess(token) {
+        var div = document.getElementById('token');
+        div.value=token;
+      }
+google.script.run.withSuccessHandler(onSuccess).getToken();
+    </script>
+</head>
+
+<body>
+    <div class="sidebar branding-below">
+        <form id="myForm" onsubmit="handleFormSubmit(this)">
+            <div class="block col-contain">
+                <div class="col-one">
+                    <label><b>Toggl Personal Token</b></label>
+                    <p> if token box is empty enter your token"</p>
+                    <input type="text" id="token" name="token"></input>
+                    <input class="blue" type="submit" value="Submit" />
+                    <div id="output"></div>
+             
+                </div>
+            </div>
+            <div class="block form-group">
+                <label for="translated-text"><b>Toogle Importer</b></label>
+            </div>
+            <div class="block" id="button-bar">
+                <button class="blue" id="run-translation" onclick="google.script.run.withSuccessHandler(updateToken).getBasicInfo()">Import</button>
+            </div>
+        </form>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+    </script>
+</body>
+
+</html>
